@@ -167,6 +167,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[9.0.0-preview.6.24327.4, )"
+            },
             "NSwag.AspNetCore": {
               "target": "Package",
               "version": "[13.5.0, )"

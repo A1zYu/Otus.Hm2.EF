@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
@@ -15,8 +17,9 @@ using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost
 {
-    public class Startup
+    public class Startup(IConfiguration configuration)
     {
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -30,6 +33,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
                 new InMemoryRepository<Preference>(FakeDataFactory.Preferences));
             services.AddScoped(typeof(IRepository<Customer>), (x) => 
                 new InMemoryRepository<Customer>(FakeDataFactory.Customers));
+
+
+            services.AddDbContext<DataContext>(opt=>opt.UseSqlite(configuration.GetConnectionString(nameof(DataContext))));
 
             services.AddOpenApiDocument(options =>
             {
