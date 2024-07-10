@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Otus.Teaching.PromoCodeFactory.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9c09f8e17d9063b2f7182c35f00e1b2faef70604")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5e0fbce877d16e8dee9221bafdbcb30045966cff")]
 [assembly: System.Reflection.AssemblyProductAttribute("Otus.Teaching.PromoCodeFactory.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Otus.Teaching.PromoCodeFactory.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
