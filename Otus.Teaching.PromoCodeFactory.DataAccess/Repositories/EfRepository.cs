@@ -25,4 +25,19 @@ public class EfRepository<T>
     {
         throw new NotImplementedException(); 
     }
+
+    public Task<T> AddAsync(T entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateAsync(T entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteAsync(T entity)
+    {
+        throw new NotImplementedException();
+    }
 }

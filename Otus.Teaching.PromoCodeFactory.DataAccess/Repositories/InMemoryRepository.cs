@@ -11,21 +11,57 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         : IRepository<T>
         where T: BaseEntity
     {
-        protected IEnumerable<T> Data { get; set; }
+        protected readonly List<T> Data;
 
         public InMemoryRepository(IEnumerable<T> data)
         {
-            Data = data;
+            Data = data.ToList();
         }
-        
+
         public Task<IEnumerable<T>> GetAllAsync()
         {
-            return Task.FromResult(Data);
+            return Task.FromResult(Data.AsEnumerable());
         }
 
         public Task<T> GetByIdAsync(Guid id)
         {
-            return Task.FromResult(Data.FirstOrDefault(x => x.Id == id));
+            var entity = Data.FirstOrDefault(x => x.Id == id);
+            return Task.FromResult(entity);
+        }
+
+        public Task<T> AddAsync(T entity)
+        {
+            entity.Id = Guid.NewGuid();
+            Data.Add(entity);
+            return Task.FromResult(entity);
+        }
+
+        public Task UpdateAsync(T entity)
+        {
+            var index = Data.FindIndex(x => x.Id == entity.Id);
+            if (index != -1)
+            {
+                Data[index] = entity;
+            }
+            else
+            {
+                throw new KeyNotFoundException("Entity with the given id not found.");
+            }
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteAsync(T entity)
+        {
+            var existingEntity = Data.FirstOrDefault(x => x.Id == entity.Id);
+            if (existingEntity != null)
+            {
+                Data.Remove(existingEntity);
+            }
+            else
+            {
+                throw new KeyNotFoundException("Entity with the given id not found.");
+            }
+            return Task.CompletedTask;
         }
     }
 }
