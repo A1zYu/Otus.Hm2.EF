@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain;
+using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 
@@ -11,33 +13,39 @@ public class EfRepository<T>
     : IRepository<T>
     where T: BaseEntity
 {
-
-    public EfRepository(IEnumerable<T> data)
+    private readonly DataContext _dataContext;
+    public EfRepository( DataContext dataContext)
     {
+        _dataContext = dataContext;
     }
         
-    public Task<IEnumerable<T>> GetAllAsync()
+    public async  Task<IEnumerable<T>> GetAllAsync()
     {
-        throw new NotImplementedException(); 
+        return await _dataContext.Set<T>().AsNoTracking().ToListAsync();
     }
 
-    public Task<T> GetByIdAsync(Guid id)
+    public async Task<T> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException(); 
+        return await _dataContext.Set<T>().FindAsync(id); 
     }
 
-    public Task<T> AddAsync(T entity)
+    public async Task<T> AddAsync(T entity)
     {
-        throw new NotImplementedException();
+        entity.Id = Guid.NewGuid();
+        var entry = await _dataContext.Set<T>().AddAsync(entity);
+        await _dataContext.SaveChangesAsync();
+        return entry.Entity; 
     }
 
-    public Task UpdateAsync(T entity)
+    public async Task UpdateAsync(T entity)
     {
-        throw new NotImplementedException();
+         _dataContext.Update(entity);
+         await _dataContext.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(T entity)
+    public async Task DeleteAsync(T entity)
     {
-        throw new NotImplementedException();
+        _dataContext.Set<T>().Remove(entity);
+        await _dataContext.SaveChangesAsync();
     }
 }

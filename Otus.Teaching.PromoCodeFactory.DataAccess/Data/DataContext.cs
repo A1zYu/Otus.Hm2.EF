@@ -10,7 +10,7 @@ public class DataContext : DbContext
     public DataContext(DbContextOptions<DataContext> options)
         : base(options)
     {
-        Database.EnsureDeleted(); // гарантируем, что бд удалена
+        Database.EnsureDeleted();
         Database.EnsureCreated();
     }
     public DbSet<Role> Roles { get; set; }

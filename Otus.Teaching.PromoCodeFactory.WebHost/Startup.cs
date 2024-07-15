@@ -26,18 +26,33 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped(typeof(IRepository<Employee>), (x) => 
-                new InMemoryRepository<Employee>(FakeDataFactory.Employees));
-            services.AddScoped(typeof(IRepository<Role>), (x) => 
-                new InMemoryRepository<Role>(FakeDataFactory.Roles));
-            services.AddScoped(typeof(IRepository<Preference>), (x) => 
-                new InMemoryRepository<Preference>(FakeDataFactory.Preferences));
-            services.AddScoped(typeof(IRepository<Customer>), (x) => 
-                new InMemoryRepository<Customer>(FakeDataFactory.Customers));
-        
-            services.AddScoped<CustomerService>();
-
+            
+            
+            // services.AddScoped(typeof(IRepository<Employee>), (x) => 
+            //     new InMemoryRepository<Employee>(FakeDataFactory.Employees));
+            // services.AddScoped(typeof(IRepository<Role>), (x) => 
+            //     new InMemoryRepository<Role>(FakeDataFactory.Roles));
+            // services.AddScoped(typeof(IRepository<Preference>), (x) => 
+            //     new InMemoryRepository<Preference>(FakeDataFactory.Preferences));
+            // services.AddScoped(typeof(IRepository<Customer>), (x) => 
+            //     new InMemoryRepository<Customer>(FakeDataFactory.Customers));
+            
             services.AddDbContext<DataContext>(opt=>opt.UseSqlite(configuration.GetConnectionString(nameof(DataContext))));
+            
+            services.AddScoped(typeof(IRepository<Role>), (x) => new EfRepository<Role>(x.GetService<DataContext>()));
+            services.AddScoped(typeof(IRepository<Employee>), (x) => new EfRepository<Employee>(x.GetService<DataContext>()));
+            services.AddScoped(typeof(IRepository<Preference>), (x) => new EfRepository<Preference>(x.GetService<DataContext>()));
+            services.AddScoped(typeof(IRepository<Customer>), (x) => new EfRepository<Customer>(x.GetService<DataContext>()));
+            services.AddScoped(typeof(IRepository<PromoCode>), (x) =>new EfRepository<PromoCode>(x.GetService<DataContext>()));
+            
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+            // Регистрация сервиса
+            services.AddScoped<CustomerService>();
+            // Регистрация контроллеров
+            services.AddControllers();
+            
+
+            
 
             services.AddOpenApiDocument(options =>
             {
